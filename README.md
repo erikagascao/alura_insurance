@@ -7,3 +7,6 @@ Tecnologias utilizadas:
 3) Jupyter
 4) NumPy
 5) Pandas
+
+Nome: Érika Gascão Nascimento
+e-mail: egnascimento@mag.com.br
