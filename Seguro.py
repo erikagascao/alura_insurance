@@ -1,5 +1,6 @@
 from typing import List
 from enum import Enum
+from datetime import date
 
 class Endereco():
     def __init__(self, rua, numero, complemento, cep, estado, cidade):
@@ -14,7 +15,7 @@ class Endereco():
         return f"{self._rua} - {self._numero}"
 
 class Pessoa():
-    def __init__(self, primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco: Endereco, contato):
+    def __init__(self, primeiro_nome, sobrenome, data_nasc: date, cpf, rg, endereco: Endereco, contato):
         self._primeiro_nome = primeiro_nome
         self._sobrenome = sobrenome
         self._data_nasc = data_nasc
@@ -27,23 +28,23 @@ class Pessoa():
         return f"{self._primeiro_nome.title()} {self._sobrenome.title()}"
 
     def __str__(self):
-        return f"{self._primeiro_nome}"       
+        return f"{self._primeiro_nome} {self._sobrenome} - {self._data_nasc.strftime('%d/%m/%Y')}"
+
            
 class Beneficiario(Pessoa):
     def __init__(self, primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato, tipo):
         super().__init__(primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato)
         self._tipo = tipo
 
-    def __str__(self):
-        return f"{self._primeiro_nome}"
+    def __repr__(self):
+        return self.__str__()
 
-class Corretor():
+class Corretor(Pessoa):
     def __init__(self, primeiro_nome, sobrenome, contato, num_susep, apolice):
-        self._primeiro_nome = primeiro_nome
-        self._sobrenome = sobrenome
-        self._contato = contato
+        super().__init__(primeiro_nome, sobrenome, None, None, None, None, contato)
         self._num_susep= num_susep
         self._apolice = apolice
+
 
 class Segurado(Pessoa):
     def __init__(self, primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato, beneficiarios: List[Beneficiario], corretor: List[Corretor], apolice):
@@ -53,9 +54,7 @@ class Segurado(Pessoa):
         self._apolice = apolice
         
     def __str__(self):
-        lista = []
-        for p in self._beneficiarios:
-            lista += [p._primeiro_nome]    
+        lista = [str(p) for p in self._beneficiarios]
         return f"{lista}"
 
 class TipoApolice(Enum):
@@ -65,7 +64,7 @@ class TipoApolice(Enum):
     Viagem = 4
         
 class Apolice():
-    def __init__(self, numero, tipo: TipoApolice, valor_premio, valor_benef, segurado: Segurado, corretor: Corretor, vig, dt_criacao, status):
+    def __init__(self, numero, tipo: TipoApolice, valor_premio, valor_benef, segurado: Segurado, corretor: Corretor, vig: date, dt_criacao: date, status):
         self._numero = numero
         self._tipo = tipo
         self._valor_premio = valor_premio
@@ -75,13 +74,48 @@ class Apolice():
         self._vig = vig
         self._dt_criacao = dt_criacao
         self._status = status
+    
+    def __str__(self):
+        return f"{self._numero} - {self._vig.strftime('%d/%m/%Y')} - {self._dt_criacao.strftime('%d/%m/%Y')}"            
+
+class Calculadora():
+    
+    def __init__(self, apolice: List[Apolice]):
+        self._apolice = apolice
         
+    
+    def calcula(self):
+        valor = 0
+        for i in self._apolice:
+            if i._tipo.value == 1:
+                valor += 0.005 * i._valor_premio + 100 + (1000 if i._valor_benef > 850000 else 0)
+            elif i._tipo.value == 2:
+                valor += 0.0035 * i._valor_premio + 75.50
+            elif i._tipo.value == 3:
+                valor += 0.002 * i._valor_premio
+            else:
+                valor += 200
+        return valor    
+        
+
      
 # endereco1 = Endereco("Merces", 43, "casa", "123", "Rio de Janeiro", "RJ")
 # endereco2 = Endereco("Tres Rios", 172, "casa", "22745160", "Rio de janeiro", "RJ")
-# benef1 = Beneficiario("Erika", "Gascao", "01/01/2000", "123456", "798", endereco1, "abc", "filha")
-# benef2 = Beneficiario("Fernanda", "Muniz", "21/07/1992", "45679", "9878",endereco2, "hdkhbd", "esposa")
+# benef1 = Beneficiario("Erika", "Gascao", date(2000, 1, 1), "123456", "798", endereco1, "abc", "filha")
+# benef2 = Beneficiario("Fernanda", "Muniz", date(1992, 7, 21), "45679", "9878",endereco2, "hdkhbd", "esposa")
 # corret1 = Corretor("Paloma", "Ferraz", "002", "999", "774")            
 # seg1 = Segurado ("Diego", "Guerrieri", "30/11/1987", "05878456", "21245", endereco2, "1254877", [benef1, benef2], corret1, "apol1")
+# apol1 = Apolice (1, TipoApolice.Vida, 100, 1000000, seg1,corret1, date(2023, 1, 1), date(2023, 3, 30),"Ativa")
+# apol2 = Apolice (2, TipoApolice.Casa, 500, 5000000, seg1,corret1, date(2023, 2, 2), date(2023, 3, 30),"Ativa")
+# calc1 = Calculadora([apol1, apol2])
+# apol1._tipo.value
 
+# calc1.calcula()
+
+
+# print(benef1)
+
+
+# seg1._beneficiarios[0]._primeiro_nome
+# seg1._beneficiarios[0]
 # print(seg1)
