@@ -1,6 +1,14 @@
 from typing import List
 from enum import Enum
 from datetime import date
+import regex as re
+
+class Estados(Enum):
+    RJ = 1
+    SP = 2
+    PE = 3
+    AM = 4
+    GO = 2
 
 class Endereco():
     def __init__(self, rua, numero, complemento, cep, estado, cidade):
@@ -10,12 +18,38 @@ class Endereco():
         self._cep = cep
         self._estado = estado
         self._cidade = cidade
-    
+
     def __str__(self):
         return f"{self._rua} - {self._numero}"
 
 class Pessoa():
     def __init__(self, primeiro_nome, sobrenome, data_nasc: date, cpf, rg, endereco: Endereco, contato):
+
+        formato_cpf = re.compile('\d{3}\.\d{3}\.\d{3}\-\d{2}')
+        if not formato_cpf.search(cpf):
+            return print(f"Digite um CPF válido")
+
+        dict= {'Primeiro Nome': primeiro_nome,'Sobrenome':sobrenome}   
+        for nome in dict:
+            if not dict[nome] or not dict[nome].strip() or len(dict[nome])<=2:
+                return print(f"Digite um {nome} válido")
+            
+        if not rg:
+            return print(f"Digite um RG válido")
+        try:
+            Estados[endereco._estado] 
+        except(KeyError):
+            return print("Digite um estado válido")
+        
+        dict2= {'rua': endereco._rua,'numero': endereco._numero,'cep':endereco._cep, 'cidade': endereco._cidade}   
+        try:
+            for nome in dict2:
+                if not dict2[nome] or not dict2[nome].strip():
+                    return print(f"Digite um {nome} válido")
+        except(AttributeError):
+            if endereco._numero==0:
+                return print(f"Digite um {nome} válido")
+            else: pass
         self._primeiro_nome = primeiro_nome
         self._sobrenome = sobrenome
         self._data_nasc = data_nasc
@@ -30,7 +64,14 @@ class Pessoa():
     def __str__(self):
         return f"{self._primeiro_nome} {self._sobrenome} - {self._data_nasc.strftime('%d/%m/%Y')}"
 
-           
+endereco1=Endereco("MERCES","  ","casa 4","25585-180","RJ","SJM")
+pessoa1=Pessoa("Erika","Nascimento",date(1995,11,20),"133.242.267-59",123,endereco1,123)
+pessoa1=Pessoa("Erika","Nascimento",date(1995,11,20),"1",123,endereco1,123)
+pessoa1=Pessoa("   ","Nascimento",date(1995,11,20),"133.242.267-59",123,endereco1,123)
+
+X={'Primeiro Nome': 'ERIKA','Sobrenome':'NASCIMENTO'}
+X.values
+
 class Beneficiario(Pessoa):
     def __init__(self, primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato, tipo):
         super().__init__(primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato)
