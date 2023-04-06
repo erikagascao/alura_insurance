@@ -12,11 +12,8 @@ class Pessoa():
 
         lista=[]
         try:
-            teste=0
             formato_cpf = re.compile('\d{3}\.\d{3}\.\d{3}\-\d{2}')
-            if not formato_cpf.search(cpf):
-                teste="erro"
-            teste+1
+            if not formato_cpf.search(cpf): "erro" + 1
         except(TypeError):
             lista=["Digite um CPF válido"]
             pass
@@ -24,19 +21,13 @@ class Pessoa():
         dict= {'Primeiro Nome': primeiro_nome,'Sobrenome':sobrenome}   
         for nome in dict:
             try:
-                teste=0
-                if not dict[nome] or not dict[nome].strip() or len(dict[nome])<=2:
-                    teste="erro"
-                teste+1
+                if not dict[nome] or dict[nome].strip()=="" or len(dict[nome])<=2: "erro" + 1
             except(TypeError):
                 lista+=[f"Digite um {nome} válido"]
                 pass
         
         try:
-            teste=0
-            if not rg:
-                teste = "erro"
-            teste + 1
+            if not rg: "erro" + 1
         except(TypeError):
             lista+=["Digite um RG válido"]
             pass
@@ -48,11 +39,8 @@ class Pessoa():
             pass
 
         try:
-            teste=0
             formato_email= re.compile('^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$')
-            if not formato_email.search(contato._email):
-                teste="erro"
-            teste+1
+            if not formato_email.search(contato._email): "erro" + 1
         except(TypeError):
             lista=["Digite um email válido"]
             pass
@@ -60,17 +48,14 @@ class Pessoa():
         dict2= {'rua': endereco._rua,'numero': endereco._numero,'cep':endereco._cep, 'cidade': endereco._cidade}   
         for nome in dict2:
             try:
-                teste=0
-                if not dict2[nome] or not dict2[nome].strip():
-                    teste="erro"
-                teste+1                        
-            except(TypeError,AttributeError):
+                if not dict2[nome] or dict2[nome].strip()=="": 1/0
+            except(ZeroDivisionError):
                     lista+= [f"Digite o(a) {nome} válido(a)"]
-        if lista ==[]:
-            pass
-        else:
+            except(AttributeError):
+                    lista+= [f"Digite o {nome} como string "]
+        if lista !=[]:
             return print(lista)
-        
+    
         self._primeiro_nome = primeiro_nome
         self._sobrenome = sobrenome
         self._data_nasc = data_nasc
