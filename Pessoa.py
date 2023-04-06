@@ -40,6 +40,7 @@ class Pessoa():
         except(TypeError):
             lista+=["Digite um RG válido"]
             pass
+        
         try:
             Estados[endereco._estado] 
         except(KeyError):
