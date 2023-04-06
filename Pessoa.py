@@ -4,7 +4,7 @@ from datetime import date, datetime
 import regex as re
 from Endereco import Endereco
 from Contato import Contato
-import Estados
+from Estados import Estados
 
 
 class Pessoa():
