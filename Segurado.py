@@ -9,10 +9,7 @@ class Segurado(Pessoa):
     def __init__(self, primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato, beneficiarios: List[Beneficiario], corretor: List[Corretor], apolice):
         lista = []
         try:
-            teste=0
-            if len(beneficiarios)>10:
-                teste="erro"
-            teste+1
+            if len(beneficiarios)>10: "erro"+1
         except(TypeError):
             lista="Número de beneficiários ultrapassou o limite de 10"
             pass
@@ -21,10 +18,8 @@ class Segurado(Pessoa):
             idade=datetime.now().year - data_nasc.year
             if datetime.now().month<data_nasc.month:  
                 idade+=-1
-            teste=0
-            if idade<18:
-                teste="erro"
-            teste+1
+            if idade<18: "erro"+1
+            
         except(TypeError):
             lista="Segurado menor de idade."
             pass
