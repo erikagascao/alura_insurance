@@ -2,11 +2,11 @@ from typing import List
 from Pessoa import Pessoa
 from Beneficiario import Beneficiario
 from Corretor import Corretor
-from datetime import date, datetime
-import regex as re
+from datetime import datetime
+from Apolice import Apolice
 
 class Segurado(Pessoa):
-    def __init__(self, primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato, beneficiarios: List[Beneficiario], corretor: List[Corretor], apolice):
+    def __init__(self, primeiro_nome, sobrenome, data_nasc, cpf, rg, endereco, contato, beneficiarios: List[Beneficiario], corretor: List[Corretor], apolice: List[Apolice]):
         lista = []
         try:
             if len(beneficiarios)>10: "erro"+1
@@ -38,3 +38,6 @@ class Segurado(Pessoa):
     def __str__(self):
         lista = [str(p) for p in self._beneficiarios]
         return f"{lista}"
+    
+    def calcula_premio(self):
+        return sum(x._valor_premio for x in self._apolice)

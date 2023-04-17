@@ -1,4 +1,3 @@
-from Pessoa import Pessoa
 from Contato import Contato
 
 class Corretor():

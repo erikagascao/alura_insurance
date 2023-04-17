@@ -13,7 +13,7 @@ class Pessoa():
         lista=[]
         try:
             formato_cpf = re.compile('\d{3}\.\d{3}\.\d{3}\-\d{2}')
-            if not formato_cpf.search(cpf): "erro" + 1
+            if not formato_cpf.search(cpf): raise (TypeError)
         except(TypeError):
             lista=["Digite um CPF válido"]
             pass
